@@ -20,7 +20,7 @@
   *  xAmplitude
   *  yAmplitude
 
-En 20 Abril modificado por José Augusto Pujato.
+El 20 Abril 2014 modificado por José Augusto Pujato.
   */
 
 #include "JoystickShield.h"
