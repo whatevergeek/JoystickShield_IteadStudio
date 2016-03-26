@@ -18,6 +18,11 @@
  *  Calibrate Joystick
  *  xAmplitude
  *  yAmplitude
+ *
+ * 26March2016 edit by Paul Amazona, irondata@outlook.com
+ * Source code for Arduino Joystick Shield from Itead Studio
+ * Edited to work explicitly for JoystickShield: http://wiki.iteadstudio.com/ITEAD_Joystick_shield
+ * Renamed a number of variables/methods to avoid confusion.
  */
 
 #ifndef JoystickShield_H
@@ -56,12 +61,12 @@ enum JoystickStates {
 enum ButtonStates {
     NO_BUTTON,     //0
     JOYSTICK_BUTTON,
-    UP_BUTTON,
-    RIGHT_BUTTON,
-    DOWN_BUTTON,
-    LEFT_BUTTON,    //5
-	F_BUTTON,
-	E_BUTTON
+    A_BUTTON,
+    B_BUTTON,
+    G_BUTTON,
+    F_BUTTON,    //5
+	E_BUTTON,
+	D_BUTTON
 };
 
 /**
@@ -100,10 +105,10 @@ public:
 
     // Button events
     bool isJoystickButton();
-    bool isUpButton();
-    bool isRightButton();
-    bool isDownButton();
-    bool isLeftButton();
+    bool isAButton();
+    bool isBButton();
+    bool isGButton();
+    bool isDButton();
 	bool isFButton();
 	bool isEButton();
 
@@ -121,12 +126,12 @@ public:
 
     // Button callbacks
     void onJoystickButton(void (*jsButtonCallback)(void));
-    void onUpButton(void (*upButtonCallback)(void));
-    void onRightButton(void (*rightButtonCallback)(void));
-    void onDownButton(void (*downButtonCallback)(void));
-    void onLeftButton(void (*leftButtonCallback)(void));
-	void onFButton(void (*FButtonCallback)(void));
-	void onEButton(void (*EButtonCallback)(void));
+    void onaButton(void (*aButtonCallback)(void));
+    void onbButton(void (*bButtonCallback)(void));
+    void ongButton(void (*gButtonCallback)(void));
+    void ondButton(void (*dButtonCallback)(void));
+	void onfButton(void (*fButtonCallback)(void));
+	void oneButton(void (*eButtonCallback)(void));
 	
 private:
 
@@ -141,14 +146,15 @@ private:
     byte pin_analog_y;
 
     //button pins
+    byte pin_but_E;
+    byte pin_but_D;
     byte pin_joystick_button;
-    byte pin_up_button;
-    byte pin_right_button;
-    byte pin_down_button;
-    byte pin_left_button;
-	byte pin_F_button;
-	byte pin_E_button;
-	
+    byte pin_but_B;
+    byte pin_but_A;
+    byte pin_but_F;
+    byte pin_but_G;
+    byte pin_But_E;
+   
 	// joystick
 	byte joystikStroke;
 	int x_position;
@@ -174,12 +180,12 @@ private:
 
     // Button callbacks
     void (*jsButtonCallback)(void);
-    void (*upButtonCallback)(void);
-    void (*rightButtonCallback)(void);
-    void (*downButtonCallback)(void);
-    void (*leftButtonCallback)(void);
-	void (*FButtonCallback)(void);
-	void (*EButtonCallback)(void);
+    void (*aButtonCallback)(void);
+    void (*bButtonCallback)(void);
+    void (*gButtonCallback)(void);
+    void (*dButtonCallback)(void);
+	void (*fButtonCallback)(void);
+	void (*eButtonCallback)(void);
 	
 
     // helper functions

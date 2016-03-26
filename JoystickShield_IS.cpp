@@ -21,9 +21,16 @@
   *  yAmplitude
 
 El 20 Abril 2014 modificado por José Augusto Pujato.
+
+ *
+ * 26March2016 edit by Paul Amazona, irondata@outlook.com
+ * Source code for Arduino Joystick Shield from Itead Studio
+ * Edited to work explicitly for JoystickShield: http://wiki.iteadstudio.com/ITEAD_Joystick_shield
+ * Renamed a number of variables/methods to avoid confusion.
+ 
   */
 
-#include "JoystickShield.h"
+#include "JoystickShield_IS.h"
 
 /**
  * Constructor
@@ -35,11 +42,11 @@ JoystickShield::JoystickShield() {
 
     // Sparkfun Joystick shield connects the Joystick to Pins 0 and 1.
     // Change it if you are using a different shield
-    setJoystickPins(0, 1);
+    setJoystickPins(1, 0);
 	
     // Sparkfun Joystick shield connects the buttons to the following pins
     // change it if you are using a different shield.
-    setButtonPins(3, 4, 5, 6, 7, 8, );
+    setButtonPins(3, 4, 5, 6, 7, 8, 9);
 
     // by default set the position to centered
     currentStatus = CENTER;
@@ -75,6 +82,7 @@ void JoystickShield::setButtonPins(byte pinButtonE, byte pinButtonD, byte pinBut
     pin_but_B     = pinButtonB;
     pin_but_A     = pinButtonA;
     pin_but_F  = pinButtonF;
+    pin_but_G  = pinButtonG;
     pin_But_E		= pinButtonE;
 
     // set Button pins to input mode
@@ -84,6 +92,7 @@ void JoystickShield::setButtonPins(byte pinButtonE, byte pinButtonD, byte pinBut
     pinMode(pin_but_B    , INPUT);
     pinMode(pin_but_A    , INPUT);
 	pinMode(pin_but_F	   , INPUT);
+    pinMode(pin_but_G	   , INPUT);
 	pinMode(pin_But_E     , INPUT);
 
     // Enable "pull-up resistors" for buttons
@@ -93,6 +102,7 @@ void JoystickShield::setButtonPins(byte pinButtonE, byte pinButtonD, byte pinBut
     digitalWrite(pin_but_B    , HIGH);
     digitalWrite(pin_but_A    , HIGH);
 	digitalWrite(pin_but_F       , HIGH);
+    digitalWrite(pin_but_G       , HIGH);
 	digitalWrite(pin_but_E       , HIGH);
 }
 
@@ -194,24 +204,20 @@ void JoystickShield::processEvents() {
     }
 	
     // Determine which buttons were pressed  SEGUIR TRABAJANDO....
-    if (digitalRead(pin_but_E) == LOW) {
+    if (digitalRead(pin_joystick_button) == LOW) {
         currentButton = JOYSTICK_BUTTON;
     }
 
-    if (digitalRead(pin_but_D) == LOW) {
-        currentButton = UP_BUTTON;
-    }
-
-    if (digitalRead(pin_joystick_button) == LOW) {
-        currentButton = RIGHT_BUTTON;
+    if (digitalRead(pin_but_A) == LOW) {
+        currentButton = A_BUTTON;
     }
 
     if (digitalRead(pin_but_B) == LOW) {
-        currentButton = DOWN_BUTTON;
+        currentButton = B_BUTTON;
     }
 
-    if (digitalRead(pin_but_A) == LOW) {
-        currentButton = LEFT_BUTTON;
+    if (digitalRead(pin_but_G) == LOW) {
+        currentButton = G_BUTTON;
     }
 
 	if (digitalRead(pin_but_F) == LOW) {
@@ -220,7 +226,11 @@ void JoystickShield::processEvents() {
 
 	if (digitalRead(pin_but_E) == LOW) {
 		currentButton = E_BUTTON;
-	}	
+	}
+        
+    if (digitalRead(pin_but_D) == LOW) {
+        currentButton = D_BUTTON;
+    }	
 }
 
 
@@ -273,30 +283,29 @@ void JoystickShield::processCallbacks() {
         jsButtonCallback();
     }
 
-    if (isUpButton() && upButtonCallback != NULL) {
-        upButtonCallback();
+    if (isAButton() && aButtonCallback != NULL) {
+        aButtonCallback();
     }
 
-    if (isRightButton() && rightButtonCallback != NULL) {
-        rightButtonCallback();
+    if (isBButton() && bButtonCallback != NULL) {
+        bButtonCallback();
     }
 
-    if (isDownButton() && downButtonCallback != NULL) {
-        downButtonCallback();
+    if (isGButton() && gButtonCallback != NULL) {
+        gButtonCallback();
+    }
+    
+    if (isFButton() && fButtonCallback != NULL) {
+        fButtonCallback();
     }
 
-    if (isLeftButton() && leftButtonCallback != NULL) {
-        leftButtonCallback();
-    }
-	
-	if (isFButton() && FButtonCallback != NULL) {
-        FButtonCallback();
-    }
-	
-	if (isEButton() && EButtonCallback != NULL) {
-		EButtonCallback();
+	if (isEButton() && eButtonCallback != NULL) {
+		eButtonCallback();
 	}
-
+    
+    if (isDButton() && dButtonCallback != NULL) {
+        dButtonCallback();
+    }
 }
 
 /**
@@ -452,8 +461,8 @@ bool JoystickShield::isJoystickButton() {
  * Up button pressed
  *
  */
-bool JoystickShield::isUpButton() {
-    if (currentButton == UP_BUTTON) {
+bool JoystickShield::isAButton() {
+    if (currentButton == A_BUTTON) {
         clearButtonStates();
         return true;
     } else {
@@ -465,8 +474,8 @@ bool JoystickShield::isUpButton() {
  * Right button pressed
  *
  */
-bool JoystickShield::isRightButton() {
-    if (currentButton == RIGHT_BUTTON) {
+bool JoystickShield::isBButton() {
+    if (currentButton == B_BUTTON) {
         clearButtonStates();
         return true;
     } else {
@@ -478,21 +487,8 @@ bool JoystickShield::isRightButton() {
  * Down button pressed
  *
  */
-bool JoystickShield::isDownButton() {
-    if (currentButton == DOWN_BUTTON) {
-        clearButtonStates();
-        return true;
-    } else {
-        return false;
-    }
-}
-
-/**
- * Left button pressed
- *
- */
-bool JoystickShield::isLeftButton() {
-    if (currentButton == LEFT_BUTTON) {
+bool JoystickShield::isGButton() {
+    if (currentButton == G_BUTTON) {
         clearButtonStates();
         return true;
     } else {
@@ -525,6 +521,23 @@ bool JoystickShield::isEButton() {
         return false;
     }
 }
+
+/**
+ * Left button pressed
+ *
+ */
+bool JoystickShield::isDButton() {
+    if (currentButton == D_BUTTON) {
+        clearButtonStates();
+        return true;
+    } else {
+        return false;
+    }
+}
+
+
+
+
 /**
  * Joystick Callbacks
  *
@@ -581,28 +594,28 @@ void JoystickShield::onJoystickButton(void (*jsButtonCallback)(void)) {
     this->jsButtonCallback = jsButtonCallback;
 }
 
-void JoystickShield::onUpButton(void (*upButtonCallback)(void)) {
-    this->upButtonCallback = upButtonCallback;
+void JoystickShield::onaButton(void (*aButtonCallback)(void)) {
+    this->aButtonCallback = aButtonCallback;
 }
 
-void JoystickShield::onRightButton(void (*rightButtonCallback)(void)) {
-    this->rightButtonCallback = rightButtonCallback;
+void JoystickShield::onbButton(void (*bButtonCallback)(void)) {
+    this->bButtonCallback = bButtonCallback;
 }
 
-void JoystickShield::onDownButton(void (*downButtonCallback)(void)) {
-    this->downButtonCallback = downButtonCallback;
+void JoystickShield::ongButton(void (*gButtonCallback)(void)) {
+    this->gButtonCallback = gButtonCallback;
 }
 
-void JoystickShield::onLeftButton(void (*leftButtonCallback)(void)) {
-    this->leftButtonCallback = leftButtonCallback;
+void JoystickShield::ondButton(void (*dButtonCallback)(void)) {
+    this->dButtonCallback = dButtonCallback;
 }
 
-void JoystickShield::onFButton(void (*FButtonCallback)(void)) {
-	this->FButtonCallback = FButtonCallback;
+void JoystickShield::onfButton(void (*fButtonCallback)(void)) {
+	this->fButtonCallback = fButtonCallback;
 }
 
-void JoystickShield::onEButton(void (*EButtonCallback)(void)) {
-	this->EButtonCallback = EButtonCallback;
+void JoystickShield::oneButton(void (*eButtonCallback)(void)) {
+	this->eButtonCallback = eButtonCallback;
 }
 
 /****************************************************************** */
@@ -634,10 +647,10 @@ void JoystickShield::initializeCallbacks() {
 
     // Button callbacks
     jsButtonCallback    = NULL;
-    upButtonCallback    = NULL;
-    rightButtonCallback = NULL;
-    downButtonCallback  = NULL;
-    leftButtonCallback  = NULL;
-	FButtonCallback		= NULL;
-	EButtonCallback		= NULL;
+    aButtonCallback    = NULL;
+    bButtonCallback = NULL;
+    gButtonCallback  = NULL;
+    dButtonCallback  = NULL;
+	fButtonCallback		= NULL;
+	eButtonCallback		= NULL;
 }
