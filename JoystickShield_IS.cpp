@@ -23,7 +23,7 @@
 El 20 Abril 2014 modificado por José Augusto Pujato.
 
  *
- * 26March2016 edit by Paul Amazona, irondata@outlook.com
+ * 26March2016 edited by Paul Amazona, irondata@outlook.com
  * Source code for Arduino Joystick Shield from Itead Studio
  * Edited to work explicitly for JoystickShield: http://wiki.iteadstudio.com/ITEAD_Joystick_shield
  * Renamed a number of variables/methods to avoid confusion.

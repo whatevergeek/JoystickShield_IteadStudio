@@ -36,6 +36,6 @@ Note
 More details about the library can be found its homepage.
 
 ==========================
-26March2016 edit by Paul Amazona, irondata@outlook.com
+26March2016 edited by Paul Amazona, irondata@outlook.com
 *Edited to work explicitly for JoystickShield: http://wiki.iteadstudio.com/ITEAD_Joystick_shield
 *Renamed a number of variables/methods to avoid confusion.
